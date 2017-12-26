@@ -8,11 +8,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Checkers
+namespace CheckersClient
 {
-    public partial class mainForm : Form
+    public partial class MainForm : Form
     {
-        public mainForm()
+        public MainForm()
         {
             InitializeComponent();
         }

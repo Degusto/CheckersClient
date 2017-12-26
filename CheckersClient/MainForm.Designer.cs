@@ -1,6 +1,6 @@
-﻿namespace Checkers
+﻿namespace CheckersClient
 {
-    partial class mainForm
+    partial class MainForm
     {
         /// <summary>
         /// Required designer variable.
@@ -345,7 +345,7 @@
             this.ClientSize = new System.Drawing.Size(842, 451);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Name = "mainForm";
-            this.Text = "Checkers";
+            this.Text = "CheckersClient";
             this.tableLayoutPanel1.ResumeLayout(false);
             this.groupBox1.ResumeLayout(false);
             this.groupBox3.ResumeLayout(false);
