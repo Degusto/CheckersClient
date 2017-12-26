@@ -1,4 +1,4 @@
-﻿namespace Warcaby
+﻿namespace Checkers
 {
     partial class mainForm
     {
@@ -345,7 +345,7 @@
             this.ClientSize = new System.Drawing.Size(842, 451);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Name = "mainForm";
-            this.Text = "Warcaby";
+            this.Text = "Checkers";
             this.tableLayoutPanel1.ResumeLayout(false);
             this.groupBox1.ResumeLayout(false);
             this.groupBox3.ResumeLayout(false);

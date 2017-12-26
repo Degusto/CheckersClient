@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Warcaby
+namespace Checkers
 {
     public partial class mainForm : Form
     {
