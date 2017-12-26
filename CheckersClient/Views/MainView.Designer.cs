@@ -1,6 +1,6 @@
-﻿namespace CheckersClient
+﻿namespace CheckersClient.Views
 {
-    partial class MainForm
+    partial class MainView
     {
         /// <summary>
         /// Required designer variable.
