@@ -1,20 +1,21 @@
 ﻿using System;
-using System.Windows.Forms;
-using CheckersClient.Views;
+using CheckersCommon.Models;
 
-namespace CheckersClient
+namespace CheckersCommon
 {
     static class Program
     {
-        /// <summary>
-        /// The main entry point for the application.
-        /// </summary>
         [STAThread]
         static void Main()
         {
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MainView());
+            var gameService = new GameService(new GameClient("127.0.0.1", 12345));
+
+            gameService.NewRoom();
+            //gameService.LeaveRoom();
+
+            //Application.EnableVisualStyles();
+            //Application.SetCompatibleTextRenderingDefault(false);
+            //Application.Run(new MainView());
         }
     }
 }

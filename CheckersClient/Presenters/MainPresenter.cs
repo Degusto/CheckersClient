@@ -1,15 +1,15 @@
-﻿using CheckersClient.Models;
-using CheckersClient.Presenters.Contracts;
-using CheckersClient.Utilities;
+﻿using CheckersCommon.Models;
+using CheckersCommon.Presenters.Contracts;
+using CheckersCommon.Utilities;
 
-namespace CheckersClient.Presenters
+namespace CheckersCommon.Presenters
 {
     internal sealed class MainPresenter
     {
         private readonly IMainView _view;
-        private readonly IServer _server;
+        private readonly IGameService _server;
 
-        internal MainPresenter(IMainView view, IServer server)
+        internal MainPresenter(IMainView view, IGameService server)
         {
             _view = view.NotNull();
             _server = server.NotNull();

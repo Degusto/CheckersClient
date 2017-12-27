@@ -1,7 +1,7 @@
 ﻿using System.Windows.Forms;
-using CheckersClient.Presenters.Contracts;
+using CheckersCommon.Presenters.Contracts;
 
-namespace CheckersClient.Views
+namespace CheckersCommon.Views
 {
     public partial class MainView : Form, IMainView
     {

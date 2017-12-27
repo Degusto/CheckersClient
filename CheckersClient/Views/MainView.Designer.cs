@@ -1,4 +1,4 @@
-﻿namespace CheckersClient.Views
+﻿namespace CheckersCommon.Views
 {
     partial class MainView
     {

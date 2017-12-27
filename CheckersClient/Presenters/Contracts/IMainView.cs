@@ -1,4 +1,4 @@
-﻿namespace CheckersClient.Presenters.Contracts
+﻿namespace CheckersCommon.Presenters.Contracts
 {
     interface IMainView
     {
