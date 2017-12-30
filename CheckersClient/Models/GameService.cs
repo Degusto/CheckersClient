@@ -3,23 +3,26 @@
 using CheckersCommon.Parameters;
 using CheckersCommon.Results;
 using CheckersCommon.Utilities;
+using Newtonsoft.Json;
 using SimpleTCP;
 
 namespace CheckersCommon.Models
 {
     internal interface IGameService
     {
-        void NewRoom();
-        void NewGame();
+        string CreateRoom();
+        void StartGame();
         void CloseRoom();
         void JoinRoom(string roomId);
         void LeaveRoom();
-        void OfferDraw();
         void Surrender();
         void MakeMove();
 
+        event EventHandler<EventArgs> PlayerWithdrew;
+        event EventHandler<EventArgs> PlayerLeft;
+        event EventHandler<EventArgs> PlayerJoined;
+        event EventHandler<EventArgs> GameStarted;
         event EventHandler<EventArgs> UpdateGameboard;
-        event EventHandler<EventArgs> DrawRequest;
     }
 
     internal sealed class GameService : IGameService
@@ -30,29 +33,51 @@ namespace CheckersCommon.Models
         public GameService(IGameClient gameClient)
         {
             _gameClient = gameClient.NotNull();
+            _gameClient.DataReceived += OnDataReceived;
         }
 
-        public string RoomId { get; private set; }
-
+        public event EventHandler<EventArgs> PlayerWithdrew;
+        public event EventHandler<EventArgs> PlayerLeft;
+        public event EventHandler<EventArgs> PlayerJoined;
+        public event EventHandler<EventArgs> GameStarted;
         public event EventHandler<EventArgs> UpdateGameboard;
-        public event EventHandler<EventArgs> DrawRequest;
 
         public void CloseRoom()
         {
             _gameClient.Send(new CloseRoomParameter(_sessionId));
-            _gameClient.DataReceived += OnDataReceived;
 
             _sessionId = null;
         }
 
-        private void OnDataReceived(object sender, Message e)
+        private void OnDataReceived(object sender, Message message)
         {
-            
+            Parameter parameter = JsonConvert.DeserializeObject<Parameter>(message.MessageString);
+
+            if(parameter.ActionType == ActionType.UpdateGameboard)
+            {
+                UpdateGameboard?.Invoke(this, EventArgs.Empty);
+            }
+            else if(parameter.ActionType == ActionType.JoinRoom)
+            {
+                PlayerJoined?.Invoke(this, EventArgs.Empty);
+            }
+            else if(parameter.ActionType == ActionType.LeaveRoom)
+            {
+                PlayerLeft?.Invoke(this, EventArgs.Empty);
+            }
+            else if(parameter.ActionType == ActionType.StartGame)
+            {
+                GameStarted?.Invoke(this, EventArgs.Empty);
+            }
+            else if(parameter.ActionType == ActionType.Surrender)
+            {
+                PlayerWithdrew?.Invoke(this, EventArgs.Empty);
+            }
         }
 
         public void JoinRoom(string roomId)
         {
-            JoinRoomResult result = _gameClient.Get<JoinRoomParameter, JoinRoomResult>(new JoinRoomParameter(roomId));
+            JoinRoomResult result = _gameClient.Get<JoinRoomParameter, JoinRoomResult>(new JoinRoomParameter { RoomId = roomId });
 
             _sessionId = result.SessionId;
         }
@@ -69,27 +94,23 @@ namespace CheckersCommon.Models
             throw new NotImplementedException();
         }
 
-        public void NewGame()
+        public void StartGame()
         {
-            throw new NotImplementedException();
+            _gameClient.Send(new NewGameParameter(_sessionId));
         }
 
-        public void NewRoom()
+        public string CreateRoom()
         {
-            NewRoomResult result = _gameClient.Get<NewRoomParameter, NewRoomResult>(new NewRoomParameter());
+            CreateRoomResult result = _gameClient.Get<CreateRoomParameter, CreateRoomResult>(new CreateRoomParameter());
 
             _sessionId = result.SessionId;
-            RoomId = result.RoomId;
-        }
 
-        public void OfferDraw()
-        {
-            throw new NotImplementedException();
+            return result.RoomId;
         }
 
         public void Surrender()
         {
-            _gameClient.Send(new SurrenderParameter());
+            _gameClient.Send(new SurrenderParameter(_sessionId));
         }
     }
 }

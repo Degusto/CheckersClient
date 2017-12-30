@@ -5,7 +5,5 @@
         public CloseRoomParameter(string sessionId) : base(sessionId, ActionType.CloseRoom)
         {
         }
-
-        public string RoomId { get; set; }
     }
 }

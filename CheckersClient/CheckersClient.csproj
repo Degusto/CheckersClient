@@ -53,6 +53,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Exceptions\ServerException.cs" />
+    <Compile Include="Extensions\ControlExtensions.cs" />
     <Compile Include="Models\GameService.cs" />
     <Compile Include="Models\GameClient.cs" />
     <Compile Include="Presenters\Contracts\IMainView.cs" />
@@ -98,5 +99,6 @@
       <Name>CheckersCommon</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

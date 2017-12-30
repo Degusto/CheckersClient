@@ -2,7 +2,7 @@
 {
     public sealed class SurrenderParameter : Parameter
     {
-        public SurrenderParameter() : base(null, ActionType.Surrender)
+        public SurrenderParameter(string sessionId) : base(sessionId, ActionType.Surrender)
         {
         }
     }

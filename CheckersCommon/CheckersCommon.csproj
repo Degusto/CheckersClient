@@ -45,15 +45,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ActionType.cs" />
+    <Compile Include="Enums\PlayerType.cs" />
     <Compile Include="Parameters\CloseRoomParameter.cs" />
     <Compile Include="Parameters\JoinRoomParameter.cs" />
+    <Compile Include="Parameters\KeepAliveParameter.cs" />
     <Compile Include="Parameters\LeaveRoomParameter.cs" />
-    <Compile Include="Parameters\NewRoomParameter.cs" />
+    <Compile Include="Parameters\CreateRoomParameter.cs" />
+    <Compile Include="Parameters\NewGameParameter.cs" />
     <Compile Include="Parameters\Parameter.cs" />
     <Compile Include="Parameters\SurrenderParameter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Results\JoinRoomResult.cs" />
-    <Compile Include="Results\NewRoomResult.cs" />
+    <Compile Include="Results\CreateRoomResult.cs" />
     <Compile Include="Results\Result.cs" />
     <Compile Include="Utilities\Guard.cs" />
   </ItemGroup>

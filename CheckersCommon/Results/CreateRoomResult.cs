@@ -2,7 +2,7 @@
 
 namespace CheckersCommon.Results
 {
-    public sealed class NewRoomResult : Result
+    public sealed class CreateRoomResult : Result
     {
         [JsonProperty(PropertyName = "session_id")]
         public string SessionId { get; set; }

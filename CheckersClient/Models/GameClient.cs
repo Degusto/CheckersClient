@@ -48,7 +48,10 @@ namespace CheckersCommon.Models
         {
             Parameter parameter = JsonConvert.DeserializeObject<Parameter>(message.MessageString);
 
-            DataReceived?.Invoke(sender, message);
+            if (parameter.ActionType != ActionType.KeepAlive)
+            {
+                DataReceived?.Invoke(sender, message);
+            }
         }
 
         public void Dispose()

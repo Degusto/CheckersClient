@@ -2,15 +2,15 @@
 {
     public enum ActionType
     {
-        NewRoom = 1,
-        NewGame = 2,
-        CloseRoom = 3,
-        JoinRoom = 4,
-        LeaveRoom = 5,
-        OfferDraw = 6,
-        Surrender = 7,
-        MakeMove = 8,
-        UpdateGameboard = 9,
-        DrawRequest = 10
+        CreateRoom = 1,
+        CloseRoom = 2,
+        JoinRoom = 3,
+        LeaveRoom = 4,
+        StartGame = 5,
+        Surrender = 6,
+        MakeMove = 7,
+        UpdateGameboard = 8,
+#warning czy to jest potrzebne?
+        KeepAlive = 999
     }
 }

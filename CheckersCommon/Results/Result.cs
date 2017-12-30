@@ -32,5 +32,10 @@ namespace CheckersCommon.Results
                 Status = "FAIL"
             };
         }
+
+        public static implicit operator string(Result result)
+        {
+            return JsonConvert.SerializeObject(result);
+        }
     }
 }
