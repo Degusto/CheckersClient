@@ -28,12 +28,13 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.gameBoardTableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.endRoundButton = new System.Windows.Forms.Button();
-            this.remainingTimeLabel = new System.Windows.Forms.Label();
+            this.gameTimeLabel = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
             this.guestPawnCountLabel = new System.Windows.Forms.Label();
             this.hostPawnCountLabel = new System.Windows.Forms.Label();
@@ -44,6 +45,7 @@
             this.surrenderButton = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.startGameButton = new System.Windows.Forms.Button();
             this.leaveGameButton = new System.Windows.Forms.Button();
             this.roomIdTextBox = new System.Windows.Forms.TextBox();
             this.enterGameButton = new System.Windows.Forms.Button();
@@ -51,7 +53,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.hostRadioButton = new System.Windows.Forms.RadioButton();
-            this.startGameButton = new System.Windows.Forms.Button();
+            this.startDateTimer = new System.Windows.Forms.Timer(this.components);
             this.tableLayoutPanel1.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -89,20 +91,34 @@
             // 
             // gameBoardTableLayoutPanel
             // 
-            this.gameBoardTableLayoutPanel.ColumnCount = 1;
-            this.gameBoardTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.gameBoardTableLayoutPanel.ColumnCount = 8;
+            this.gameBoardTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 12.5F));
+            this.gameBoardTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 12.5F));
+            this.gameBoardTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 12.5F));
+            this.gameBoardTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 12.5F));
+            this.gameBoardTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 12.5F));
+            this.gameBoardTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 12.5F));
+            this.gameBoardTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 12.5F));
+            this.gameBoardTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 12.5F));
             this.gameBoardTableLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.gameBoardTableLayoutPanel.Location = new System.Drawing.Point(3, 16);
             this.gameBoardTableLayoutPanel.Name = "gameBoardTableLayoutPanel";
-            this.gameBoardTableLayoutPanel.RowCount = 1;
-            this.gameBoardTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.gameBoardTableLayoutPanel.RowCount = 8;
+            this.gameBoardTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 12.5F));
+            this.gameBoardTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 12.5F));
+            this.gameBoardTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 12.5F));
+            this.gameBoardTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 12.5F));
+            this.gameBoardTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 12.5F));
+            this.gameBoardTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 12.5F));
+            this.gameBoardTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 12.5F));
+            this.gameBoardTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 12.5F));
             this.gameBoardTableLayoutPanel.Size = new System.Drawing.Size(580, 426);
             this.gameBoardTableLayoutPanel.TabIndex = 0;
             // 
             // groupBox3
             // 
             this.groupBox3.Controls.Add(this.endRoundButton);
-            this.groupBox3.Controls.Add(this.remainingTimeLabel);
+            this.groupBox3.Controls.Add(this.gameTimeLabel);
             this.groupBox3.Controls.Add(this.label10);
             this.groupBox3.Controls.Add(this.guestPawnCountLabel);
             this.groupBox3.Controls.Add(this.hostPawnCountLabel);
@@ -129,15 +145,15 @@
             this.endRoundButton.Text = "Zakończ ruch";
             this.endRoundButton.UseVisualStyleBackColor = true;
             // 
-            // remainingTimeLabel
+            // gameTimeLabel
             // 
-            this.remainingTimeLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.remainingTimeLabel.Location = new System.Drawing.Point(24, 140);
-            this.remainingTimeLabel.Name = "remainingTimeLabel";
-            this.remainingTimeLabel.Size = new System.Drawing.Size(211, 23);
-            this.remainingTimeLabel.TabIndex = 14;
-            this.remainingTimeLabel.Text = "00:15";
-            this.remainingTimeLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.gameTimeLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.gameTimeLabel.Location = new System.Drawing.Point(24, 140);
+            this.gameTimeLabel.Name = "gameTimeLabel";
+            this.gameTimeLabel.Size = new System.Drawing.Size(211, 23);
+            this.gameTimeLabel.TabIndex = 14;
+            this.gameTimeLabel.Text = "00:00:00";
+            this.gameTimeLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // label10
             // 
@@ -146,26 +162,26 @@
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(211, 23);
             this.label10.TabIndex = 13;
-            this.label10.Text = "CZAS NA ROZGRYWKI";
+            this.label10.Text = "CZAS ROZGRYWKI";
             this.label10.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // guestPawnCountLabel
             // 
             this.guestPawnCountLabel.AutoSize = true;
-            this.guestPawnCountLabel.Location = new System.Drawing.Point(142, 52);
+            this.guestPawnCountLabel.Location = new System.Drawing.Point(134, 52);
             this.guestPawnCountLabel.Name = "guestPawnCountLabel";
-            this.guestPawnCountLabel.Size = new System.Drawing.Size(35, 13);
+            this.guestPawnCountLabel.Size = new System.Drawing.Size(13, 13);
             this.guestPawnCountLabel.TabIndex = 11;
-            this.guestPawnCountLabel.Text = "label8";
+            this.guestPawnCountLabel.Text = "0";
             // 
             // hostPawnCountLabel
             // 
             this.hostPawnCountLabel.AutoSize = true;
             this.hostPawnCountLabel.Location = new System.Drawing.Point(134, 28);
             this.hostPawnCountLabel.Name = "hostPawnCountLabel";
-            this.hostPawnCountLabel.Size = new System.Drawing.Size(35, 13);
+            this.hostPawnCountLabel.Size = new System.Drawing.Size(13, 13);
             this.hostPawnCountLabel.TabIndex = 10;
-            this.hostPawnCountLabel.Text = "label7";
+            this.hostPawnCountLabel.Text = "0";
             // 
             // currentPlayerLabel
             // 
@@ -242,6 +258,16 @@
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Rozgrywka";
             // 
+            // startGameButton
+            // 
+            this.startGameButton.Location = new System.Drawing.Point(20, 165);
+            this.startGameButton.Name = "startGameButton";
+            this.startGameButton.Size = new System.Drawing.Size(215, 23);
+            this.startGameButton.TabIndex = 7;
+            this.startGameButton.Text = "Nowa gra";
+            this.startGameButton.UseVisualStyleBackColor = true;
+            this.startGameButton.Click += new System.EventHandler(this.startGameButton_Click);
+            // 
             // leaveGameButton
             // 
             this.leaveGameButton.Location = new System.Drawing.Point(20, 101);
@@ -309,15 +335,10 @@
             this.hostRadioButton.UseVisualStyleBackColor = true;
             this.hostRadioButton.CheckedChanged += new System.EventHandler(this.hostRadioButton_CheckedChanged);
             // 
-            // newGameButton
+            // startDateTimer
             // 
-            this.startGameButton.Location = new System.Drawing.Point(20, 165);
-            this.startGameButton.Name = "newGameButton";
-            this.startGameButton.Size = new System.Drawing.Size(215, 23);
-            this.startGameButton.TabIndex = 7;
-            this.startGameButton.Text = "Nowa gra";
-            this.startGameButton.UseVisualStyleBackColor = true;
-            this.startGameButton.Click += new System.EventHandler(this.startGameButton_Click);
+            this.startDateTimer.Interval = 1000;
+            this.startDateTimer.Tick += new System.EventHandler(this.startDateTimer_Tick);
             // 
             // MainView
             // 
@@ -325,6 +346,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(842, 451);
             this.Controls.Add(this.tableLayoutPanel1);
+            this.DoubleBuffered = true;
             this.Name = "MainView";
             this.Text = "CheckersClient";
             this.tableLayoutPanel1.ResumeLayout(false);
@@ -354,7 +376,7 @@
         private System.Windows.Forms.Button surrenderButton;
         private System.Windows.Forms.Button endRoundButton;
         private System.Windows.Forms.TableLayoutPanel gameBoardTableLayoutPanel;
-        private System.Windows.Forms.Label remainingTimeLabel;
+        private System.Windows.Forms.Label gameTimeLabel;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.Label guestPawnCountLabel;
         private System.Windows.Forms.Label hostPawnCountLabel;
@@ -363,6 +385,7 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button startGameButton;
+        private System.Windows.Forms.Timer startDateTimer;
     }
 }
 

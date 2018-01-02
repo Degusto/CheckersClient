@@ -14,7 +14,7 @@ namespace CheckersCommon.Results
         public bool Success => Status == "OK";
 
         [JsonProperty(PropertyName = "status")]
-        protected string Status { get; private set; } = "OK";
+        public string Status { get; private set; } = "OK";
 
         [JsonProperty(PropertyName = "error")]
         public string Error { get; private set; }

@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using CheckersCommon.Enums;
+using CheckersCommon.Models;
 
 namespace CheckersCommon.Presenters.Contracts
 {
@@ -14,6 +16,10 @@ namespace CheckersCommon.Presenters.Contracts
         bool CanSurrender { set; }
         bool CanStartGame { set; }
         bool CanChangePlayerType { set; }
+
+        DateTime StartDate { set; }
+        IEnumerable<Pawn> Pawns {  set; }
+        GameStatus GameStatus { set; }
 
         event EventHandler<EventArgs> Surrender;
         event EventHandler<EventArgs> LeaveGame;

@@ -4,7 +4,6 @@ using CheckersCommon.Parameters;
 using CheckersCommon.Results;
 using CheckersCommon.Utilities;
 using Newtonsoft.Json;
-using SimpleTCP;
 
 namespace CheckersCommon.Models
 {
@@ -18,11 +17,10 @@ namespace CheckersCommon.Models
         void Surrender();
         void MakeMove();
 
-        event EventHandler<EventArgs> PlayerWithdrew;
         event EventHandler<EventArgs> PlayerLeft;
         event EventHandler<EventArgs> PlayerJoined;
         event EventHandler<EventArgs> GameStarted;
-        event EventHandler<EventArgs> UpdateGameboard;
+        event EventHandler<UpdateGameboardParameter> UpdateGameboard;
     }
 
     internal sealed class GameService : IGameService
@@ -36,11 +34,10 @@ namespace CheckersCommon.Models
             _gameClient.DataReceived += OnDataReceived;
         }
 
-        public event EventHandler<EventArgs> PlayerWithdrew;
         public event EventHandler<EventArgs> PlayerLeft;
         public event EventHandler<EventArgs> PlayerJoined;
         public event EventHandler<EventArgs> GameStarted;
-        public event EventHandler<EventArgs> UpdateGameboard;
+        public event EventHandler<UpdateGameboardParameter> UpdateGameboard;
 
         public void CloseRoom()
         {
@@ -49,29 +46,25 @@ namespace CheckersCommon.Models
             _sessionId = null;
         }
 
-        private void OnDataReceived(object sender, Message message)
+        private void OnDataReceived(object sender, string json)
         {
-            Parameter parameter = JsonConvert.DeserializeObject<Parameter>(message.MessageString);
+            Parameter parameter = JsonConvert.DeserializeObject<Parameter>(json);
 
-            if(parameter.ActionType == ActionType.UpdateGameboard)
+            if (parameter.ActionType == ActionType.UpdateGameboard)
             {
-                UpdateGameboard?.Invoke(this, EventArgs.Empty);
+                UpdateGameboard?.Invoke(this, JsonConvert.DeserializeObject<UpdateGameboardParameter>(json));
             }
-            else if(parameter.ActionType == ActionType.JoinRoom)
+            else if (parameter.ActionType == ActionType.JoinRoom)
             {
                 PlayerJoined?.Invoke(this, EventArgs.Empty);
             }
-            else if(parameter.ActionType == ActionType.LeaveRoom)
+            else if (parameter.ActionType == ActionType.LeaveRoom)
             {
                 PlayerLeft?.Invoke(this, EventArgs.Empty);
             }
-            else if(parameter.ActionType == ActionType.StartGame)
+            else if (parameter.ActionType == ActionType.StartGame)
             {
                 GameStarted?.Invoke(this, EventArgs.Empty);
-            }
-            else if(parameter.ActionType == ActionType.Surrender)
-            {
-                PlayerWithdrew?.Invoke(this, EventArgs.Empty);
             }
         }
 
@@ -96,7 +89,7 @@ namespace CheckersCommon.Models
 
         public void StartGame()
         {
-            _gameClient.Send(new NewGameParameter(_sessionId));
+            _gameClient.Send(new StartGameParameter(_sessionId));
         }
 
         public string CreateRoom()

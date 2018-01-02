@@ -1,5 +1,6 @@
 ﻿using System;
-
+using System.Diagnostics;
+using System.Linq;
 using CheckersClient.Exceptions;
 using CheckersCommon.Parameters;
 using CheckersCommon.Results;
@@ -13,7 +14,7 @@ namespace CheckersCommon.Models
 {
     internal interface IGameClient
     {
-        event EventHandler<Message> DataReceived;
+        event EventHandler<string> DataReceived;
 
         void Send<TParameter>(TParameter data)
             where TParameter : Parameter;
@@ -28,29 +29,41 @@ namespace CheckersCommon.Models
         private readonly int _port;
         private readonly string _address;
         private readonly SimpleTcpClient _client;
+        private readonly string Id = Guid.NewGuid().ToString();
 
         public GameClient(string address, int port)
         {
             _port = port;
             _address = address;
 
-            _client = new SimpleTcpClient
-            {
-                Delimiter = 0
-            };
+            _client = new SimpleTcpClient { Delimiter = 0 };
 
             _client.DataReceived += OnDataReceived;
         }
 
-        public event EventHandler<Message> DataReceived;
+        public event EventHandler<string> DataReceived;
 
         private void OnDataReceived(object sender, Message message)
         {
-            Parameter parameter = JsonConvert.DeserializeObject<Parameter>(message.MessageString);
-
-            if (parameter.ActionType != ActionType.KeepAlive)
+            try
             {
-                DataReceived?.Invoke(sender, message);
+                string json = message.MessageString;
+
+                Parameter parameter = JsonConvert.DeserializeObject<Parameter>(json);
+
+                if (parameter.ActionType != ActionType.KeepAlive)
+                {
+                    DataReceived?.Invoke(sender, json);
+                }
+            }
+            catch (Exception ex)
+            {
+                if(!Debugger.IsAttached)
+                {
+                    System.Windows.Forms.MessageBox.Show(Id + ex.Message);
+                }
+
+                throw;
             }
         }
 
@@ -66,11 +79,11 @@ namespace CheckersCommon.Models
         {
             data.NotNull();
 
-            string json = JsonConvert.SerializeObject(data);
+            string parameterJson = JsonConvert.SerializeObject(data);
 
-            Message message = SendRequest(json);
+            string resultJson = SendRequest(parameterJson);
 
-            return JsonConvert.DeserializeObject<TResult>(message.MessageString);
+            return JsonConvert.DeserializeObject<TResult>(resultJson);
         }
 
         public void Send<TParameter>(TParameter data)
@@ -83,23 +96,23 @@ namespace CheckersCommon.Models
             SendRequest(json);
         }
 
-        private Message SendRequest(string json)
+        private string SendRequest(string parameterJson)
         {
             if (_client.TcpClient == null || !_client.TcpClient.Connected)
             {
                 _client.Connect(_address, _port);
             }
 
-            Message message = _client.WriteLineAndGetReply(json, TimeSpan.FromHours(1));
+            string resultJson = _client.WriteLineAndGetReply(parameterJson, TimeSpan.FromHours(1)).MessageString;
 
-            Result result = JsonConvert.DeserializeObject<Result>(message.MessageString);
+            Result result = JsonConvert.DeserializeObject<Result>(resultJson);
 
             if (!result.Success)
             {
                 throw new ServerException(result.Error);
             }
 
-            return message;
+            return resultJson;
         }
     }
 }

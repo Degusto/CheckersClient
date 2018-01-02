@@ -1,6 +1,8 @@
 ﻿using System;
+
 using CheckersCommon.Enums;
 using CheckersCommon.Models;
+using CheckersCommon.Parameters;
 using CheckersCommon.Presenters.Contracts;
 using CheckersCommon.Utilities;
 
@@ -32,7 +34,30 @@ namespace CheckersCommon.Presenters
             _gameService.PlayerJoined += OnPlayerJoined;
             _gameService.PlayerLeft += OnPlayerLeft;
             _gameService.GameStarted += OnGameStarted;
-            _gameService.PlayerWithdrew += OnPlayerWithdrew;
+            _gameService.UpdateGameboard += OnUpdateGameboard;
+        }
+
+        private void OnUpdateGameboard(object sender, UpdateGameboardParameter e)
+        {
+            _view.GameStatus = e.GameStatus;
+            _view.StartDate = e.StartDate;
+            _view.Pawns = e.Pawns;
+
+            switch (e.GameStatus)
+            {
+                case GameStatus.GuestWithdrew:
+                    _view.CanSurrender = false;
+                    _view.CanLeaveGame = _view.PlayerType == PlayerType.Guest;
+                    _view.CanStartGame = _view.PlayerType == PlayerType.Host;
+
+                    break;
+                case GameStatus.HostWithdrew:
+                    _view.CanSurrender = false;
+                    _view.CanLeaveGame = _view.PlayerType == PlayerType.Guest;
+                    _view.CanStartGame = _view.PlayerType == PlayerType.Host;
+
+                    break;
+            }
         }
 
         private void OnStartGame(object sender, EventArgs e)
@@ -47,13 +72,7 @@ namespace CheckersCommon.Presenters
         private void OnSurrender(object sender, EventArgs e)
         {
             _gameService.Surrender();
-            _view.CanSurrender = false;
-            _view.CanLeaveGame = _view.PlayerType == PlayerType.Guest;
-            _view.CanStartGame = _view.PlayerType == PlayerType.Host;
-        }
 
-        private void OnPlayerWithdrew(object sender, EventArgs e)
-        {
             _view.CanSurrender = false;
             _view.CanLeaveGame = _view.PlayerType == PlayerType.Guest;
             _view.CanStartGame = _view.PlayerType == PlayerType.Host;
