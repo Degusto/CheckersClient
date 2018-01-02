@@ -45,6 +45,7 @@ namespace CheckersCommon.Models
 
         private void OnDataReceived(object sender, Message message)
         {
+#warning remove later
             try
             {
                 string json = message.MessageString;
@@ -54,6 +55,10 @@ namespace CheckersCommon.Models
                 if (parameter.ActionType != ActionType.KeepAlive)
                 {
                     DataReceived?.Invoke(sender, json);
+                }
+                else
+                {
+                    message.Reply(Result.CreateSuccess());
                 }
             }
             catch (Exception ex)

@@ -10,7 +10,7 @@ namespace CheckersCommon.Models
         public Position Position { get; set; }
 
         [JsonProperty(PropertyName = "available_moves")]
-        public IEnumerable<Position> AvailableMoves { get; set; }
+        public IEnumerable<Move> AvailableMoves { get; set; }
 
         [JsonProperty(PropertyName = "owner")]
         public PlayerType Owner { get; set; }

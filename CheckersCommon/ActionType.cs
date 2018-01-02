@@ -10,7 +10,6 @@
         Surrender = 6,
         MakeMove = 7,
         UpdateGameboard = 8,
-#warning czy to jest potrzebne?
         KeepAlive = 999
     }
 }

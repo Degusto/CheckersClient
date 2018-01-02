@@ -31,9 +31,9 @@ namespace CheckersCommon.Presenters
             _view.CanSurrender = false;
             _view.CanStartGame = false;
 
-            _gameService.PlayerJoined += OnPlayerJoined;
             _gameService.PlayerLeft += OnPlayerLeft;
             _gameService.GameStarted += OnGameStarted;
+            _gameService.PlayerJoined += OnPlayerJoined;
             _gameService.UpdateGameboard += OnUpdateGameboard;
         }
 
@@ -43,57 +43,18 @@ namespace CheckersCommon.Presenters
             _view.StartDate = e.StartDate;
             _view.Pawns = e.Pawns;
 
-            switch (e.GameStatus)
+            if (e.GameStatus == GameStatus.GuestWithdrew)
             {
-                case GameStatus.GuestWithdrew:
-                    _view.CanSurrender = false;
-                    _view.CanLeaveGame = _view.PlayerType == PlayerType.Guest;
-                    _view.CanStartGame = _view.PlayerType == PlayerType.Host;
-
-                    break;
-                case GameStatus.HostWithdrew:
-                    _view.CanSurrender = false;
-                    _view.CanLeaveGame = _view.PlayerType == PlayerType.Guest;
-                    _view.CanStartGame = _view.PlayerType == PlayerType.Host;
-
-                    break;
+                _view.CanSurrender = false;
+                _view.CanLeaveGame = _view.PlayerType == PlayerType.Guest;
+                _view.CanStartGame = _view.PlayerType == PlayerType.Host;
             }
-        }
-
-        private void OnStartGame(object sender, EventArgs e)
-        {
-            _gameService.StartGame();
-
-            _view.CanLeaveGame = false;
-            _view.CanSurrender = true;
-            _view.CanStartGame = false;
-        }
-
-        private void OnSurrender(object sender, EventArgs e)
-        {
-            _gameService.Surrender();
-
-            _view.CanSurrender = false;
-            _view.CanLeaveGame = _view.PlayerType == PlayerType.Guest;
-            _view.CanStartGame = _view.PlayerType == PlayerType.Host;
-        }
-
-        private void OnGameStarted(object sender, EventArgs e)
-        {
-            _view.CanLeaveGame = false;
-            _view.CanSurrender = true;
-        }
-
-        private void OnPlayerJoined(object sender, EventArgs e)
-        {
-            _view.CanStartGame = true;
-            _view.CanLeaveGame = false;
-        }
-
-        private void OnPlayerLeft(object sender, EventArgs e)
-        {
-            _view.CanStartGame = false;
-            _view.CanLeaveGame = true;
+            else if (e.GameStatus == GameStatus.HostWithdrew)
+            {
+                _view.CanSurrender = false;
+                _view.CanLeaveGame = _view.PlayerType == PlayerType.Guest;
+                _view.CanStartGame = _view.PlayerType == PlayerType.Host;
+            }
         }
 
         private void OnEnterGame(object sender, EventArgs e)
@@ -144,6 +105,42 @@ namespace CheckersCommon.Presenters
             _view.CanSurrender = false;
             _view.CanLeaveGame = false;
             _isInRoom = false;
+        }
+
+        private void OnPlayerJoined(object sender, EventArgs e)
+        {
+            _view.CanStartGame = true;
+            _view.CanLeaveGame = false;
+        }
+
+        private void OnPlayerLeft(object sender, EventArgs e)
+        {
+            _view.CanStartGame = false;
+            _view.CanLeaveGame = true;
+        }
+
+        private void OnStartGame(object sender, EventArgs e)
+        {
+            _gameService.StartGame();
+
+            _view.CanLeaveGame = false;
+            _view.CanSurrender = true;
+            _view.CanStartGame = false;
+        }
+
+        private void OnGameStarted(object sender, EventArgs e)
+        {
+            _view.CanLeaveGame = false;
+            _view.CanSurrender = true;
+        }
+
+        private void OnSurrender(object sender, EventArgs e)
+        {
+            _gameService.Surrender();
+
+            _view.CanSurrender = false;
+            _view.CanLeaveGame = _view.PlayerType == PlayerType.Guest;
+            _view.CanStartGame = _view.PlayerType == PlayerType.Host;
         }
     }
 }

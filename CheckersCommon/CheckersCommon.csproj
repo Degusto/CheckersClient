@@ -51,6 +51,7 @@
     <Compile Include="Enums\GameStatus.cs" />
     <Compile Include="Enums\PlayerType.cs" />
     <Compile Include="Extensions\SocketExtensions.cs" />
+    <Compile Include="Models\Move.cs" />
     <Compile Include="Models\Pawn.cs" />
     <Compile Include="Models\Position.cs" />
     <Compile Include="Parameters\CloseRoomParameter.cs" />
@@ -58,6 +59,7 @@
     <Compile Include="Parameters\KeepAliveParameter.cs" />
     <Compile Include="Parameters\LeaveRoomParameter.cs" />
     <Compile Include="Parameters\CreateRoomParameter.cs" />
+    <Compile Include="Parameters\MakeMoveParameter.cs" />
     <Compile Include="Parameters\StartGameParameter.cs" />
     <Compile Include="Parameters\Parameter.cs" />
     <Compile Include="Parameters\SurrenderParameter.cs" />

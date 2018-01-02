@@ -15,7 +15,7 @@ namespace CheckersCommon.Models
         void JoinRoom(string roomId);
         void LeaveRoom();
         void Surrender();
-        void MakeMove();
+        void MakeMove(Move move);
 
         event EventHandler<EventArgs> PlayerLeft;
         event EventHandler<EventArgs> PlayerJoined;
@@ -82,9 +82,9 @@ namespace CheckersCommon.Models
             _sessionId = null;
         }
 
-        public void MakeMove()
+        public void MakeMove(Move move)
         {
-            throw new NotImplementedException();
+            _gameClient.Send(new MakeMoveParameter(_sessionId) { Move = move });
         }
 
         public void StartGame()

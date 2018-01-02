@@ -73,39 +73,14 @@ namespace CheckersTestServer
                 case ActionType.Surrender:
                     return Surrender(json);
                 case ActionType.MakeMove:
-                    return null;
+                    return MakeMove(json);
                 case ActionType.UpdateGameboard:
-                    return null;
+                    return Result.CreateError("Action can't be executed by client");
+                case ActionType.KeepAlive:
+                    return Result.CreateError("Action can't be executed by client");
                 default:
                     throw new ArgumentOutOfRangeException("Unknown action type");
             }
-        }
-
-        private static void UpdateGameboard(Game game)
-        {
-            UpdateGameboardParameter result = new UpdateGameboardParameter
-            {
-                Pawns = game.Host.Pawns.Concat(game.Guest.Pawns),
-                StartDate = game.StartDate,
-                GameStatus = game.Status
-            };
-
-            string json = JsonConvert.SerializeObject(result);
-
-            var host = game.Host.Client;
-            var guest = game.Guest.Client;
-
-            if (host != null)
-            {
-                host.Send(json);
-            }
-
-            if (guest != null)
-            {
-                guest.Send(json);
-            }
-
-            Console.WriteLine(json);
         }
 
         private static Result CreateRoom(string json, Socket client)
@@ -119,28 +94,6 @@ namespace CheckersTestServer
             Games.Add(game);
 
             return new CreateRoomResult { SessionId = game.Host.SessionId, RoomId = game.RoomId };
-        }
-
-        private static Result StartGame(string json)
-        {
-            var parameter = JsonConvert.DeserializeObject<StartGameParameter>(json);
-
-            var game = Games.FirstOrDefault(g => g.Host.SessionId == parameter.SessionId);
-
-            if (game == null)
-            {
-                return Result.CreateError("Couldn't find room");
-            }
-
-            if (game.Guest == null)
-            {
-                return Result.CreateError("You can't start game without second player");
-            }
-
-            game.StartGame();
-            game.Guest.Client.Send(json);
-
-            return Result.CreateSuccess();
         }
 
         private static Result CloseRoom(string json)
@@ -210,6 +163,28 @@ namespace CheckersTestServer
             return Result.CreateSuccess();
         }
 
+        private static Result StartGame(string json)
+        {
+            var parameter = JsonConvert.DeserializeObject<StartGameParameter>(json);
+
+            var game = Games.FirstOrDefault(g => g.Host.SessionId == parameter.SessionId);
+
+            if (game == null)
+            {
+                return Result.CreateError("Couldn't find room");
+            }
+
+            if (game.Guest == null)
+            {
+                return Result.CreateError("You can't start game without second player");
+            }
+
+            game.StartGame();
+            game.Guest.Client.Send(json);
+
+            return Result.CreateSuccess();
+        }
+
         private static Result Surrender(string json)
         {
             var parameter = JsonConvert.DeserializeObject<SurrenderParameter>(json);
@@ -231,6 +206,40 @@ namespace CheckersTestServer
             }
 
             return Result.CreateSuccess();
+        }
+
+        private static Result MakeMove(string json)
+        {
+            var parameter = JsonConvert.DeserializeObject<MakeMoveParameter>(json);
+
+            return null;
+        }
+
+        private static void UpdateGameboard(Game game)
+        {
+            UpdateGameboardParameter result = new UpdateGameboardParameter
+            {
+                Pawns = game.Host.Pawns.Concat(game.Guest.Pawns),
+                StartDate = game.StartDate,
+                GameStatus = game.Status
+            };
+
+            string json = JsonConvert.SerializeObject(result);
+
+            var host = game.Host.Client;
+            var guest = game.Guest.Client;
+
+            if (host != null)
+            {
+                host.Send(json);
+            }
+
+            if (guest != null)
+            {
+                guest.Send(json);
+            }
+
+            Console.WriteLine(json);
         }
     }
 }
