@@ -56,7 +56,6 @@
     <Compile Include="Models\Position.cs" />
     <Compile Include="Parameters\CloseRoomParameter.cs" />
     <Compile Include="Parameters\JoinRoomParameter.cs" />
-    <Compile Include="Parameters\KeepAliveParameter.cs" />
     <Compile Include="Parameters\LeaveRoomParameter.cs" />
     <Compile Include="Parameters\CreateRoomParameter.cs" />
     <Compile Include="Parameters\MakeMoveParameter.cs" />

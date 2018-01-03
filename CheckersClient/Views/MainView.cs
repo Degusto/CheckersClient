@@ -19,6 +19,7 @@ namespace CheckersCommon.Views
         private const int ColumnCount = 8;
         private bool IsHost => hostRadioButton.Checked;
 
+        public event EventHandler<Move> MakeMove;
         public event EventHandler<EventArgs> Surrender;
         public event EventHandler<EventArgs> LeaveGame;
         public event EventHandler<EventArgs> EnterGame;
@@ -39,18 +40,67 @@ namespace CheckersCommon.Views
             {
                 for (int column = 0; column < ColumnCount; column++)
                 {
-                    var panel = new Panel
+                    var cellControl = new CellControl
                     {
                         Dock = DockStyle.Fill,
                         Margin = new Padding(0),
-                        BackColor = (row + column) % 2 == 0 ? Color.LightYellow : Color.SaddleBrown
+                        PawnVisible = false
                     };
 
-                    panel.Controls.Add(new PawnControl { Visible = false, Dock = DockStyle.Fill });
+                    cellControl.BackColor = (row + column) % 2 == 0 ? Color.LightYellow : Color.SaddleBrown;
+                    cellControl.MakeMove += async (sender, args) => await Task.Run(() => OnPawnMakeMove(sender, args));
+                    cellControl.ReleaseMouse += async (sender, args) => await Task.Run(() => OnPawnReleaseMouse(sender, args));
+                    cellControl.CaptureMouse += async (sender, args) => await Task.Run(() => OnPawnCaptureMouse(sender, args));
 
-                    gameBoardTableLayoutPanel.Controls.Add(panel);
-                    gameBoardTableLayoutPanel.SetCellPosition(panel, new TableLayoutPanelCellPosition { Row = row, Column = column });
+                    gameBoardTableLayoutPanel.Controls.Add(cellControl);
+                    gameBoardTableLayoutPanel.SetCellPosition(cellControl, new TableLayoutPanelCellPosition { Row = row, Column = column });
                 }
+            }
+        }
+
+        private void OnPawnMakeMove(object sender, EventArgs e)
+        {
+            var pawnControl = gameBoardTableLayoutPanel.Controls.OfType<CellControl>().Single(x => x.CapturedMouse);
+            var placeholderControl = (CellControl)sender;
+            var position = gameBoardTableLayoutPanel.GetPositionFromControl(placeholderControl);
+
+            var move = pawnControl.Pawn.AvailableMoves.Single(x => x.DestinatedPosition.Row == position.Row && x.DestinatedPosition.Column == position.Column);
+
+            MakeMove?.Invoke(this, move);
+        }
+
+        private void OnPawnReleaseMouse(object sender, EventArgs e)
+        {
+            HidePlaceholders();
+        }
+
+        private void OnPawnCaptureMouse(object sender, EventArgs e)
+        {
+            HidePlaceholders();
+
+            var cellControl = (CellControl)sender;
+
+            foreach (var cell in gameBoardTableLayoutPanel.Controls.OfType<CellControl>().Where(x => x.CapturedMouse && x != cellControl))
+            {
+                cell.CapturedMouse = false;
+            }
+
+            foreach (var move in cellControl.Pawn.AvailableMoves)
+            {
+                var placeholder = (CellControl)gameBoardTableLayoutPanel.GetControlFromPosition(move.DestinatedPosition.Column, move.DestinatedPosition.Row);
+
+                placeholder.IsPlaceholder = true;
+                placeholder.PawnVisible = true;
+            }
+        }
+
+        private void HidePlaceholders()
+        {
+            foreach (var placeholder in gameBoardTableLayoutPanel.Controls.OfType<CellControl>().Where(x => x.IsPlaceholder))
+            {
+                placeholder.IsPlaceholder = false;
+                placeholder.CapturedMouse = false;
+                placeholder.PawnVisible = false;
             }
         }
 
@@ -115,52 +165,52 @@ namespace CheckersCommon.Views
             hostPawnCountLabel.Text = pawns.Where(p => p.Owner == PlayerType.Host).Count().ToString();
             guestPawnCountLabel.Text = pawns.Where(p => p.Owner == PlayerType.Guest).Count().ToString();
 
-            foreach (var pawn in gameBoardTableLayoutPanel.Controls.OfType<Panel>().Select(p => p.Controls.OfType<PawnControl>().Single()))
+            foreach (var cellControl in gameBoardTableLayoutPanel.Controls.OfType<CellControl>())
             {
-                pawn.Visible = false;
+                cellControl.PawnVisible = false;
+                cellControl.CapturedMouse = false;
+                cellControl.IsPlaceholder = false;
             }
 
             foreach (var pawn in pawns)
             {
-                var panel = (Panel)gameBoardTableLayoutPanel.GetControlFromPosition(pawn.Position.Column, pawn.Position.Row);
+                var cellControl = (CellControl)gameBoardTableLayoutPanel.GetControlFromPosition(pawn.Position.Column, pawn.Position.Row);
 
-                var pawnControl = panel.Controls.OfType<PawnControl>().Single();
-
-                pawnControl.PlayerType = pawn.Owner;
-                pawnControl.Visible = true;
+                cellControl.Pawn = pawn;
+                cellControl.PawnVisible = true;
             }
         }
 
-        private void hostRadioButton_CheckedChanged(object sender, EventArgs e)
+        private void OnHostRadioButtonCheckedChanged(object sender, EventArgs e)
         {
             enterGameButton.Text = IsHost ? "Załóż nowy pokój" : "Dołącz do pokoju";
             leaveGameButton.Text = IsHost ? "Zamknij pokój" : "Opuść pokój";
             roomIdTextBox.ReadOnly = IsHost;
         }
 
-        private async void enterGameButton_Click(object sender, EventArgs e)
+        private async void OnEnterGameButtonClick(object sender, EventArgs e)
         {
             await Task.Run(() => EnterGame?.Invoke(this, EventArgs.Empty));
         }
 
-        private async void leaveGameButton_Click(object sender, EventArgs e)
+        private async void OnLeaveGameButtonClick(object sender, EventArgs e)
         {
             await Task.Run(() => LeaveGame?.Invoke(this, EventArgs.Empty));
         }
 
-        private async void surrenderButton_Click(object sender, EventArgs e)
+        private async void OnSurrenderButtonClick(object sender, EventArgs e)
         {
             await Task.Run(() => Surrender?.Invoke(this, EventArgs.Empty));
         }
 
-        private async void startGameButton_Click(object sender, EventArgs e)
+        private async void OnStartGameButtonClick(object sender, EventArgs e)
         {
             await Task.Run(() => StartGame?.Invoke(this, EventArgs.Empty));
         }
 
-        private void startDateTimer_Tick(object sender, EventArgs e)
+        private void OnStartDateTimerTick(object sender, EventArgs e)
         {
-            this.InvokeIfRequired(() => gameTimeLabel.Text = (DateTime.Now - StartDate).ToString(@"hh\:mm\:ss"));
+            this.InvokeIfRequired(() => gameTimeLabel.Text = surrenderButton.Enabled ? (DateTime.Now - StartDate).ToString(@"hh\:mm\:ss") : string.Empty);
         }
     }
 }

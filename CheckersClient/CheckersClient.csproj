@@ -55,17 +55,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Exceptions\PlayerDisconnectedException.cs" />
     <Compile Include="Exceptions\ServerException.cs" />
     <Compile Include="Extensions\ControlExtensions.cs" />
     <Compile Include="Models\GameService.cs" />
     <Compile Include="Models\GameClient.cs" />
     <Compile Include="Presenters\Contracts\IMainView.cs" />
     <Compile Include="Presenters\MainPresenter.cs" />
-    <Compile Include="Views\Controls\PawnControl.cs">
+    <Compile Include="Views\Controls\CellControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Views\Controls\PawnControl.Designer.cs">
-      <DependentUpon>PawnControl.cs</DependentUpon>
+    <Compile Include="Views\Controls\CellControl.Designer.cs">
+      <DependentUpon>CellControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Views\MainView.cs">
       <SubType>Form</SubType>
@@ -75,8 +76,8 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="Views\Controls\PawnControl.resx">
-      <DependentUpon>PawnControl.cs</DependentUpon>
+    <EmbeddedResource Include="Views\Controls\CellControl.resx">
+      <DependentUpon>CellControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\MainView.resx">
       <DependentUpon>MainView.cs</DependentUpon>

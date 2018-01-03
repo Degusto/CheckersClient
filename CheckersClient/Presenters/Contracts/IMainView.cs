@@ -21,6 +21,7 @@ namespace CheckersCommon.Presenters.Contracts
         IEnumerable<Pawn> Pawns {  set; }
         GameStatus GameStatus { set; }
 
+        event EventHandler<Move> MakeMove;
         event EventHandler<EventArgs> Surrender;
         event EventHandler<EventArgs> LeaveGame;
         event EventHandler<EventArgs> EnterGame;

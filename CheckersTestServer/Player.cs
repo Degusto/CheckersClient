@@ -1,5 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net.Sockets;
+
+using CheckersCommon.Extensions;
 using CheckersCommon.Models;
 
 namespace CheckersTestServer
@@ -8,22 +12,21 @@ namespace CheckersTestServer
     {
         private Socket _client;
 
-        internal Socket Client
-        {
-            get => _client;
-            set
-            {
-                _client = value;
+        public Player() : this(null, null) { }
 
-                if (value != null)
-                {
-                    value.NoDelay = true;
-                }
+        public Player(string sessionId, Socket client)
+        {
+            _client = client;
+            SessionId = sessionId;
+
+            if(_client != null)
+            {
+                _client.NoDelay = true;
             }
         }
 
-        internal string SessionId { get; set; }
+        internal string SessionId { get; }
 
-        internal IEnumerable<Pawn> Pawns { get; set; }
+        internal void SendMessage(string json) => _client.Send(json);
     }
 }

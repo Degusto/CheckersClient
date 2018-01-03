@@ -20,6 +20,7 @@ namespace CheckersCommon.Presenters
             _view = view.NotNull();
             _gameService = gameService.NotNull();
 
+            _view.MakeMove += OnMakeMove;
             _view.EnterGame += OnEnterGame;
             _view.LeaveGame += OnLeaveGame;
             _view.Surrender += OnSurrender;
@@ -37,23 +38,32 @@ namespace CheckersCommon.Presenters
             _gameService.UpdateGameboard += OnUpdateGameboard;
         }
 
+        private void OnPlayerDisconnected(object sender, EventArgs e)
+        {
+            _view.RoomId = null;
+            _view.CanChangePlayerType = true;
+            _view.CanEnterGame = true;
+            _view.CanSurrender = false;
+            _view.CanLeaveGame = false;
+            _isInRoom = false;
+        }
+
         private void OnUpdateGameboard(object sender, UpdateGameboardParameter e)
         {
             _view.GameStatus = e.GameStatus;
             _view.StartDate = e.StartDate;
             _view.Pawns = e.Pawns;
 
-            if (e.GameStatus == GameStatus.GuestWithdrew)
+            if (e.GameStatus == GameStatus.GuestWithdrew
+             || e.GameStatus == GameStatus.HostWithdrew
+             || e.GameStatus == GameStatus.GuestWon
+             || e.GameStatus == GameStatus.HostWon)
             {
                 _view.CanSurrender = false;
                 _view.CanLeaveGame = _view.PlayerType == PlayerType.Guest;
                 _view.CanStartGame = _view.PlayerType == PlayerType.Host;
-            }
-            else if (e.GameStatus == GameStatus.HostWithdrew)
-            {
-                _view.CanSurrender = false;
-                _view.CanLeaveGame = _view.PlayerType == PlayerType.Guest;
-                _view.CanStartGame = _view.PlayerType == PlayerType.Host;
+
+                _view.ShowInfo(e.GameStatus.ToString());
             }
         }
 
@@ -141,6 +151,11 @@ namespace CheckersCommon.Presenters
             _view.CanSurrender = false;
             _view.CanLeaveGame = _view.PlayerType == PlayerType.Guest;
             _view.CanStartGame = _view.PlayerType == PlayerType.Host;
+        }
+
+        private void OnMakeMove(object sender, Move move)
+        {
+            _gameService.MakeMove(move);
         }
     }
 }

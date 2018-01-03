@@ -33,7 +33,6 @@
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.gameBoardTableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.endRoundButton = new System.Windows.Forms.Button();
             this.gameTimeLabel = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
             this.guestPawnCountLabel = new System.Windows.Forms.Label();
@@ -117,7 +116,6 @@
             // 
             // groupBox3
             // 
-            this.groupBox3.Controls.Add(this.endRoundButton);
             this.groupBox3.Controls.Add(this.gameTimeLabel);
             this.groupBox3.Controls.Add(this.label10);
             this.groupBox3.Controls.Add(this.guestPawnCountLabel);
@@ -135,15 +133,6 @@
             this.groupBox3.TabIndex = 2;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Informacje o grze";
-            // 
-            // endRoundButton
-            // 
-            this.endRoundButton.Location = new System.Drawing.Point(6, 216);
-            this.endRoundButton.Name = "endRoundButton";
-            this.endRoundButton.Size = new System.Drawing.Size(100, 23);
-            this.endRoundButton.TabIndex = 1;
-            this.endRoundButton.Text = "Zakończ ruch";
-            this.endRoundButton.UseVisualStyleBackColor = true;
             // 
             // gameTimeLabel
             // 
@@ -229,7 +218,7 @@
             this.surrenderButton.TabIndex = 4;
             this.surrenderButton.Text = "Poddaj grę";
             this.surrenderButton.UseVisualStyleBackColor = true;
-            this.surrenderButton.Click += new System.EventHandler(this.surrenderButton_Click);
+            this.surrenderButton.Click += new System.EventHandler(this.OnSurrenderButtonClick);
             // 
             // button2
             // 
@@ -266,7 +255,7 @@
             this.startGameButton.TabIndex = 7;
             this.startGameButton.Text = "Nowa gra";
             this.startGameButton.UseVisualStyleBackColor = true;
-            this.startGameButton.Click += new System.EventHandler(this.startGameButton_Click);
+            this.startGameButton.Click += new System.EventHandler(this.OnStartGameButtonClick);
             // 
             // leaveGameButton
             // 
@@ -276,7 +265,7 @@
             this.leaveGameButton.TabIndex = 4;
             this.leaveGameButton.Text = "Zamknij pokój/Opuść pokój";
             this.leaveGameButton.UseVisualStyleBackColor = true;
-            this.leaveGameButton.Click += new System.EventHandler(this.leaveGameButton_Click);
+            this.leaveGameButton.Click += new System.EventHandler(this.OnLeaveGameButtonClick);
             // 
             // roomIdTextBox
             // 
@@ -294,7 +283,7 @@
             this.enterGameButton.TabIndex = 1;
             this.enterGameButton.Text = "Załóż nowy pokój/Dołącz do pokoju";
             this.enterGameButton.UseVisualStyleBackColor = true;
-            this.enterGameButton.Click += new System.EventHandler(this.enterGameButton_Click);
+            this.enterGameButton.Click += new System.EventHandler(this.OnEnterGameButtonClick);
             // 
             // guestRadioButton
             // 
@@ -333,12 +322,12 @@
             this.hostRadioButton.TabIndex = 5;
             this.hostRadioButton.Text = "Gospodarz";
             this.hostRadioButton.UseVisualStyleBackColor = true;
-            this.hostRadioButton.CheckedChanged += new System.EventHandler(this.hostRadioButton_CheckedChanged);
+            this.hostRadioButton.CheckedChanged += new System.EventHandler(this.OnHostRadioButtonCheckedChanged);
             // 
             // startDateTimer
             // 
             this.startDateTimer.Interval = 1000;
-            this.startDateTimer.Tick += new System.EventHandler(this.startDateTimer_Tick);
+            this.startDateTimer.Tick += new System.EventHandler(this.OnStartDateTimerTick);
             // 
             // MainView
             // 
@@ -374,7 +363,6 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.RadioButton hostRadioButton;
         private System.Windows.Forms.Button surrenderButton;
-        private System.Windows.Forms.Button endRoundButton;
         private System.Windows.Forms.TableLayoutPanel gameBoardTableLayoutPanel;
         private System.Windows.Forms.Label gameTimeLabel;
         private System.Windows.Forms.Label label10;

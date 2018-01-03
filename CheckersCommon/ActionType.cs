@@ -9,7 +9,6 @@
         StartGame = 5,
         Surrender = 6,
         MakeMove = 7,
-        UpdateGameboard = 8,
-        KeepAlive = 999
+        UpdateGameboard = 8
     }
 }

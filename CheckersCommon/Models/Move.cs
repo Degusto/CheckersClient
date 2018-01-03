@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using System;
+using Newtonsoft.Json;
 
 namespace CheckersCommon.Models
 {
@@ -7,10 +8,31 @@ namespace CheckersCommon.Models
         [JsonProperty(PropertyName = "id")]
         public string Id { get; set; }
 
-        [JsonProperty(PropertyName = "will_take_pawn")]
-        public bool WillTakePawn { get; set; }
+        [JsonProperty(PropertyName = "destinated_position")]
+        public Position DestinatedPosition { get; set; }
 
-        [JsonProperty("destination_position")]
-        public Position DestinationPosition { get; set; }
+        [JsonIgnore]
+        public Position SourcePosition { get; set; }
+
+        [JsonIgnore]
+        public Position MiddlePosition
+        {
+            get
+            {
+                if(!IsCapture)
+                {
+                    throw new InvalidOperationException("Move doesn't capture");
+
+                }
+
+                int row = SourcePosition.Row - (SourcePosition.Row - DestinatedPosition.Row) / 2;
+                int column = SourcePosition.Column - (SourcePosition.Column - DestinatedPosition.Column) / 2;
+
+                return (row, column);
+            }
+        }
+
+        [JsonIgnore]
+        public bool IsCapture => Math.Abs(SourcePosition.Row - DestinatedPosition.Row) > 1 || Math.Abs(SourcePosition.Column - DestinatedPosition.Column) > 1;
     }
 }

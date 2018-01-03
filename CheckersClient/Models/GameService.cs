@@ -84,7 +84,7 @@ namespace CheckersCommon.Models
 
         public void MakeMove(Move move)
         {
-            _gameClient.Send(new MakeMoveParameter(_sessionId) { Move = move });
+            _gameClient.Send(new MakeMoveParameter(_sessionId) { MoveId = move.Id });
         }
 
         public void StartGame()

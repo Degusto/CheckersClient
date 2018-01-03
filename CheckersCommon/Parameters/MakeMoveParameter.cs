@@ -1,5 +1,4 @@
-﻿using CheckersCommon.Models;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 namespace CheckersCommon.Parameters
 {
@@ -9,7 +8,7 @@ namespace CheckersCommon.Parameters
         {
         }
 
-        [JsonProperty(PropertyName = "move")]
-        public Move Move { get; set; }
+        [JsonProperty(PropertyName = "move_id")]
+        public string MoveId { get; set; }
     }
 }

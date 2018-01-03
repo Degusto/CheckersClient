@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Linq;
+
 using CheckersClient.Exceptions;
 using CheckersCommon.Parameters;
 using CheckersCommon.Results;
@@ -52,18 +52,11 @@ namespace CheckersCommon.Models
 
                 Parameter parameter = JsonConvert.DeserializeObject<Parameter>(json);
 
-                if (parameter.ActionType != ActionType.KeepAlive)
-                {
-                    DataReceived?.Invoke(sender, json);
-                }
-                else
-                {
-                    message.Reply(Result.CreateSuccess());
-                }
+                DataReceived?.Invoke(sender, json);
             }
             catch (Exception ex)
             {
-                if(!Debugger.IsAttached)
+                if (!Debugger.IsAttached)
                 {
                     System.Windows.Forms.MessageBox.Show(Id + ex.Message);
                 }
@@ -114,7 +107,14 @@ namespace CheckersCommon.Models
 
             if (!result.Success)
             {
-                throw new ServerException(result.Error);
+                if (result.Error == "player_disconnected")
+                {
+                    throw new PlayerDisconnectedException();
+                }
+                else
+                {
+                    throw new ServerException(result.Error);
+                }
             }
 
             return resultJson;
