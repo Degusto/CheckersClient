@@ -58,71 +58,47 @@ namespace CheckersCommon.Views
             }
         }
 
-        private void OnPawnMakeMove(object sender, EventArgs e)
-        {
-            var pawnControl = gameBoardTableLayoutPanel.Controls.OfType<CellControl>().Single(x => x.CapturedMouse);
-            var placeholderControl = (CellControl)sender;
-            var position = gameBoardTableLayoutPanel.GetPositionFromControl(placeholderControl);
-
-            var move = pawnControl.Pawn.AvailableMoves.Single(x => x.DestinatedPosition.Row == position.Row && x.DestinatedPosition.Column == position.Column);
-
-            MakeMove?.Invoke(this, move);
-        }
-
-        private void OnPawnReleaseMouse(object sender, EventArgs e)
-        {
-            HidePlaceholders();
-        }
-
-        private void OnPawnCaptureMouse(object sender, EventArgs e)
-        {
-            HidePlaceholders();
-
-            var cellControl = (CellControl)sender;
-
-            foreach (var cell in gameBoardTableLayoutPanel.Controls.OfType<CellControl>().Where(x => x.CapturedMouse && x != cellControl))
-            {
-                cell.CapturedMouse = false;
-            }
-
-            foreach (var move in cellControl.Pawn.AvailableMoves)
-            {
-                var placeholder = (CellControl)gameBoardTableLayoutPanel.GetControlFromPosition(move.DestinatedPosition.Column, move.DestinatedPosition.Row);
-
-                placeholder.IsPlaceholder = true;
-                placeholder.PawnVisible = true;
-            }
-        }
-
-        private void HidePlaceholders()
-        {
-            foreach (var placeholder in gameBoardTableLayoutPanel.Controls.OfType<CellControl>().Where(x => x.IsPlaceholder))
-            {
-                placeholder.IsPlaceholder = false;
-                placeholder.CapturedMouse = false;
-                placeholder.PawnVisible = false;
-            }
-        }
-
         public void ShowInfo(string message) => MessageBox.Show(message);
 
         public DateTime StartDate { private get; set; }
 
         public PlayerType PlayerType => IsHost ? PlayerType.Host : PlayerType.Guest;
 
-        public IEnumerable<Pawn> Pawns { set => this.InvokeIfRequired(() => SetPawns(value)); }
+        public IEnumerable<Pawn> Pawns
+        {
+            set => this.InvokeIfRequired(() => SetPawns(value));
+        }
 
-        public string RoomId { get => roomIdTextBox.Text; set => this.InvokeIfRequired(() => roomIdTextBox.Text = value); }
+        public string RoomId
+        {
+            get => roomIdTextBox.Text;
+            set => this.InvokeIfRequired(() => roomIdTextBox.Text = value);
+        }
 
-        public bool CanChangePlayerType { set => this.InvokeIfRequired(() => hostRadioButton.Enabled = guestRadioButton.Enabled = value); }
+        public bool CanChangePlayerType
+        {
+            set => this.InvokeIfRequired(() => hostRadioButton.Enabled = guestRadioButton.Enabled = value);
+        }
 
-        public bool CanLeaveGame { set => this.InvokeIfRequired(() => leaveGameButton.Enabled = value); }
+        public bool CanLeaveGame
+        {
+            set => this.InvokeIfRequired(() => leaveGameButton.Enabled = value);
+        }
 
-        public bool CanSurrender { set => this.InvokeIfRequired(() => surrenderButton.Enabled = value); }
+        public bool CanSurrender
+        {
+            set => this.InvokeIfRequired(() => surrenderButton.Enabled = value);
+        }
 
-        public bool CanStartGame { set => this.InvokeIfRequired(() => startGameButton.Enabled = value); }
+        public bool CanStartGame
+        {
+            set => this.InvokeIfRequired(() => startGameButton.Enabled = value);
+        }
 
-        public bool CanEditRoomId { set => this.InvokeIfRequired(() => roomIdTextBox.ReadOnly = !value); }
+        public bool CanEditRoomId
+        {
+            set => this.InvokeIfRequired(() => roomIdTextBox.ReadOnly = !value);
+        }
 
         public bool CanEnterGame
         {
@@ -165,12 +141,7 @@ namespace CheckersCommon.Views
             hostPawnCountLabel.Text = pawns.Where(p => p.Owner == PlayerType.Host).Count().ToString();
             guestPawnCountLabel.Text = pawns.Where(p => p.Owner == PlayerType.Guest).Count().ToString();
 
-            foreach (var cellControl in gameBoardTableLayoutPanel.Controls.OfType<CellControl>())
-            {
-                cellControl.PawnVisible = false;
-                cellControl.CapturedMouse = false;
-                cellControl.IsPlaceholder = false;
-            }
+            ResetPawns();
 
             foreach (var pawn in pawns)
             {
@@ -178,6 +149,16 @@ namespace CheckersCommon.Views
 
                 cellControl.Pawn = pawn;
                 cellControl.PawnVisible = true;
+            }
+        }
+
+        private void ResetPawns()
+        {
+            foreach (var cellControl in gameBoardTableLayoutPanel.Controls.OfType<CellControl>())
+            {
+                cellControl.PawnVisible = false;
+                cellControl.CapturedMouse = false;
+                cellControl.IsPlaceholder = false;
             }
         }
 
@@ -211,6 +192,62 @@ namespace CheckersCommon.Views
         private void OnStartDateTimerTick(object sender, EventArgs e)
         {
             this.InvokeIfRequired(() => gameTimeLabel.Text = surrenderButton.Enabled ? (DateTime.Now - StartDate).ToString(@"hh\:mm\:ss") : string.Empty);
+        }
+
+        private void OnPawnMakeMove(object sender, EventArgs e)
+        {
+            var pawnControl = gameBoardTableLayoutPanel.Controls.OfType<CellControl>().Single(x => x.CapturedMouse);
+            var placeholderControl = (CellControl)sender;
+            var position = gameBoardTableLayoutPanel.GetPositionFromControl(placeholderControl);
+
+            var move = pawnControl.Pawn.AvailableMoves.Single(x => x.DestinatedPosition.Row == position.Row && x.DestinatedPosition.Column == position.Column);
+
+            MakeMove?.Invoke(this, move);
+        }
+
+        private void OnPawnReleaseMouse(object sender, EventArgs e)
+        {
+            HidePlaceholders();
+        }
+
+        private void OnPawnCaptureMouse(object sender, EventArgs e)
+        {
+            HidePlaceholders();
+
+            var cellControl = (CellControl)sender;
+
+            ClearCapture(cellControl);
+
+            ShowMoves(cellControl);
+        }
+
+        private void ClearCapture(CellControl cellControl)
+        {
+            foreach (var cell in gameBoardTableLayoutPanel.Controls.OfType<CellControl>().Where(x => x.CapturedMouse && x != cellControl))
+            {
+                cell.CapturedMouse = false;
+            }
+        }
+
+        private void ShowMoves(CellControl cellControl)
+        {
+            foreach (var move in cellControl.Pawn.AvailableMoves)
+            {
+                var placeholder = (CellControl)gameBoardTableLayoutPanel.GetControlFromPosition(move.DestinatedPosition.Column, move.DestinatedPosition.Row);
+
+                placeholder.IsPlaceholder = true;
+                placeholder.PawnVisible = true;
+            }
+        }
+
+        private void HidePlaceholders()
+        {
+            foreach (var placeholder in gameBoardTableLayoutPanel.Controls.OfType<CellControl>().Where(x => x.IsPlaceholder))
+            {
+                placeholder.IsPlaceholder = false;
+                placeholder.CapturedMouse = false;
+                placeholder.PawnVisible = false;
+            }
         }
     }
 }

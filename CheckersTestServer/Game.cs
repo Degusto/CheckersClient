@@ -13,9 +13,9 @@ namespace CheckersTestServer
         private const int RowCount = 8;
         private const int ColumnCount = 8;
 
-        private readonly List<Pawn> _pawns = new List<Pawn>();
-
         private GameStatus _gameStatus;
+
+        private readonly List<Pawn> _pawns = new List<Pawn>();
 
         public event EventHandler<EventArgs> UpdateGameboard;
 
@@ -46,15 +46,12 @@ namespace CheckersTestServer
             }
         }
 
-        internal static Game Create(Socket host)
+        internal static Game Create(Socket host) => new Game
         {
-            return new Game
-            {
-                RoomId = Guid.NewGuid().ToString(),
-                Guest = new Player(),
-                Host = new Player(Guid.NewGuid().ToString(), host),
-            };
-        }
+            RoomId = Guid.NewGuid().ToString(),
+            Guest = new Player(),
+            Host = new Player(Guid.NewGuid().ToString(), host),
+        };
 
         internal void AddGuest(Socket client) => Guest = new Player(Guid.NewGuid().ToString(), client);
 
@@ -198,8 +195,6 @@ namespace CheckersTestServer
         {
             bool isValidPosition = position.Row >= 0 && position.Row <= RowCount - 1 && position.Column >= 0 && position.Column <= ColumnCount - 1;
             bool isAvailable = !_pawns.Any(p => p.Position.Row == position.Row && p.Position.Column == position.Column);
-
-            var items = _pawns.Where(p => p.Position.Row == position.Row && p.Position.Column == position.Column);
             bool isOccupiedByEnemy = isValidPosition && !isAvailable && _pawns.Single(p => p.Position.Row == position.Row && p.Position.Column == position.Column).Owner != pawn.Owner;
 
             if (isValidPosition && isAvailable)

@@ -50,7 +50,10 @@ namespace CheckersClient.Views.Controls
             }
         }
 
-        public bool PawnVisible { set => this.InvokeIfRequired(() => panel.Visible = value); }
+        public bool PawnVisible
+        {
+            set => this.InvokeIfRequired(() => panel.Visible = value);
+        }
 
         private void OnPanelMouseClick(object sender, MouseEventArgs e)
         {

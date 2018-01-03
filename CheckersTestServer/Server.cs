@@ -55,7 +55,7 @@ namespace CheckersTestServer
 
                 e.Reply(resultJson);
             }
-            catch(SocketException)
+            catch (SocketException)
             {
                 e.Reply(JsonConvert.SerializeObject(Result.CreateError("player_disconnected")));
             }
@@ -223,38 +223,33 @@ namespace CheckersTestServer
 
         private void UpdateGameboard(Game game)
         {
-            var hostResult = new UpdateGameboardParameter
-            {
-                Pawns = GetPawns(game, PlayerType.Host),
-                StartDate = game.StartDate,
-                GameStatus = game.Status,
-            };
-
-            var guestResult = new UpdateGameboardParameter
-            {
-                Pawns = GetPawns(game, PlayerType.Guest),
-                StartDate = game.StartDate,
-                GameStatus = game.Status
-            };
+            var hostResult = GetUpdateGameboardParameter(game, PlayerType.Host);
+            var guestResult = GetUpdateGameboardParameter(game, PlayerType.Guest);
 
             string hostJson = JsonConvert.SerializeObject(hostResult);
             string guestJSon = JsonConvert.SerializeObject(guestResult);
 
-            var host = game.Host;
-            var guest = game.Guest;
+            SendUpdateGameboardMessage(game.Host, hostJson);
+            SendUpdateGameboardMessage(game.Guest, guestJSon);
+        }
 
-            if (host != null)
+        private UpdateGameboardParameter GetUpdateGameboardParameter(Game game, PlayerType playerType)
+        {
+            return new UpdateGameboardParameter
             {
-                host.SendMessage(hostJson);
+                Pawns = GetPawns(game, playerType),
+                StartDate = game.StartDate,
+                GameStatus = game.Status,
+            };
+        }
 
-                Log(hostJson);
-            }
-
-            if (guest != null)
+        private void SendUpdateGameboardMessage(Player player, string json)
+        {
+            if (player != null)
             {
-                guest.SendMessage(guestJSon);
+                player.SendMessage(json);
 
-                Log(guestJSon);
+                Log(json);
             }
         }
 
@@ -264,11 +259,11 @@ namespace CheckersTestServer
             {
                 return game.HostPawns.Concat(game.GuestPawns.Select(p => new Pawn { Position = p.Position, IsPromoted = p.IsPromoted, Owner = p.Owner }));
             }
-            else if(game.Status == GameStatus.HostTurn && playerType == PlayerType.Guest)
+            else if (game.Status == GameStatus.HostTurn && playerType == PlayerType.Guest)
             {
                 return game.HostPawns.Concat(game.GuestPawns).Select(p => new Pawn { Position = p.Position, IsPromoted = p.IsPromoted, Owner = p.Owner });
             }
-            else if(game.Status == GameStatus.GuestTurn && playerType == PlayerType.Host)
+            else if (game.Status == GameStatus.GuestTurn && playerType == PlayerType.Host)
             {
                 return game.GuestPawns.Concat(game.HostPawns).Select(p => new Pawn { Position = p.Position, IsPromoted = p.IsPromoted, Owner = p.Owner });
             }
