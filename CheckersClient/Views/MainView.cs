@@ -116,8 +116,6 @@ namespace CheckersCommon.Views
             {
                 this.InvokeIfRequired(() =>
                 {
-                    startDateTimer.Enabled = value == GameStatus.HostTurn || value == GameStatus.GuestTurn;
-
                     switch (value)
                     {
                         case GameStatus.HostTurn:
