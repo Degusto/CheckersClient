@@ -21,8 +21,6 @@ namespace CheckersTestServer
 
         private Game() { }
 
-        internal DateTime StartDate { get; private set; }
-
         internal Player Host { get; private set; }
 
         internal Player Guest { get; private set; }
@@ -73,8 +71,6 @@ namespace CheckersTestServer
             {
                 throw new InvalidOperationException("Game is already in progress");
             }
-
-            StartDate = DateTime.Now;
 
             _pawns.Clear();
             _pawns.AddRange(GetHostPawns().ToList());

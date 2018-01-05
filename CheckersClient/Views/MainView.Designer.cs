@@ -28,13 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.gameBoardTableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.gameTimeLabel = new System.Windows.Forms.Label();
-            this.label10 = new System.Windows.Forms.Label();
             this.guestPawnCountLabel = new System.Windows.Forms.Label();
             this.hostPawnCountLabel = new System.Windows.Forms.Label();
             this.currentPlayerLabel = new System.Windows.Forms.Label();
@@ -52,7 +49,6 @@
             this.label1 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.hostRadioButton = new System.Windows.Forms.RadioButton();
-            this.startDateTimer = new System.Windows.Forms.Timer(this.components);
             this.tableLayoutPanel1.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -116,8 +112,6 @@
             // 
             // groupBox3
             // 
-            this.groupBox3.Controls.Add(this.gameTimeLabel);
-            this.groupBox3.Controls.Add(this.label10);
             this.groupBox3.Controls.Add(this.guestPawnCountLabel);
             this.groupBox3.Controls.Add(this.hostPawnCountLabel);
             this.groupBox3.Controls.Add(this.currentPlayerLabel);
@@ -133,26 +127,6 @@
             this.groupBox3.TabIndex = 2;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Informacje o grze";
-            // 
-            // gameTimeLabel
-            // 
-            this.gameTimeLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.gameTimeLabel.Location = new System.Drawing.Point(24, 140);
-            this.gameTimeLabel.Name = "gameTimeLabel";
-            this.gameTimeLabel.Size = new System.Drawing.Size(211, 23);
-            this.gameTimeLabel.TabIndex = 14;
-            this.gameTimeLabel.Text = "00:00:00";
-            this.gameTimeLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // label10
-            // 
-            this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.label10.Location = new System.Drawing.Point(24, 104);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(211, 23);
-            this.label10.TabIndex = 13;
-            this.label10.Text = "CZAS ROZGRYWKI";
-            this.label10.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // guestPawnCountLabel
             // 
@@ -324,11 +298,6 @@
             this.hostRadioButton.UseVisualStyleBackColor = true;
             this.hostRadioButton.CheckedChanged += new System.EventHandler(this.OnHostRadioButtonCheckedChanged);
             // 
-            // startDateTimer
-            // 
-            this.startDateTimer.Interval = 1000;
-            this.startDateTimer.Tick += new System.EventHandler(this.OnStartDateTimerTick);
-            // 
             // MainView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -364,8 +333,6 @@
         private System.Windows.Forms.RadioButton hostRadioButton;
         private System.Windows.Forms.Button surrenderButton;
         private System.Windows.Forms.TableLayoutPanel gameBoardTableLayoutPanel;
-        private System.Windows.Forms.Label gameTimeLabel;
-        private System.Windows.Forms.Label label10;
         private System.Windows.Forms.Label guestPawnCountLabel;
         private System.Windows.Forms.Label hostPawnCountLabel;
         private System.Windows.Forms.Label currentPlayerLabel;
@@ -373,7 +340,6 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button startGameButton;
-        private System.Windows.Forms.Timer startDateTimer;
     }
 }
 

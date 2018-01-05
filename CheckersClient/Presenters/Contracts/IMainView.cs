@@ -17,7 +17,6 @@ namespace CheckersCommon.Presenters.Contracts
         bool CanStartGame { set; }
         bool CanChangePlayerType { set; }
 
-        DateTime StartDate { set; }
         IEnumerable<Pawn> Pawns {  set; }
         GameStatus GameStatus { set; }
 

@@ -51,7 +51,6 @@ namespace CheckersCommon.Presenters
         private void OnUpdateGameboard(object sender, UpdateGameboardParameter e)
         {
             _view.GameStatus = e.GameStatus;
-            _view.StartDate = e.StartDate;
             _view.Pawns = e.Pawns;
 
             if (e.GameStatus == GameStatus.GuestWithdrew

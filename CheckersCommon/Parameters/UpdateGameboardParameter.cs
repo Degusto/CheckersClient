@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using CheckersCommon.Enums;
 using CheckersCommon.Models;
 using Newtonsoft.Json;
@@ -11,9 +10,6 @@ namespace CheckersCommon.Parameters
         public UpdateGameboardParameter() : base(null, ActionType.UpdateGameboard)
         {
         }
-
-        [JsonProperty(PropertyName = "start_date")]
-        public DateTime StartDate { get; set; }
 
         [JsonProperty(PropertyName = "game_status")]
         public GameStatus GameStatus { get; set; }

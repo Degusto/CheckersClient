@@ -238,7 +238,6 @@ namespace CheckersTestServer
             return new UpdateGameboardParameter
             {
                 Pawns = GetPawns(game, playerType),
-                StartDate = game.StartDate,
                 GameStatus = game.Status,
             };
         }

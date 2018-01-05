@@ -60,8 +60,6 @@ namespace CheckersCommon.Views
 
         public void ShowInfo(string message) => MessageBox.Show(message);
 
-        public DateTime StartDate { private get; set; }
-
         public PlayerType PlayerType => IsHost ? PlayerType.Host : PlayerType.Guest;
 
         public IEnumerable<Pawn> Pawns
@@ -187,11 +185,6 @@ namespace CheckersCommon.Views
         private async void OnStartGameButtonClick(object sender, EventArgs e)
         {
             await Task.Run(() => StartGame?.Invoke(this, EventArgs.Empty));
-        }
-
-        private void OnStartDateTimerTick(object sender, EventArgs e)
-        {
-            this.InvokeIfRequired(() => gameTimeLabel.Text = surrenderButton.Enabled ? (DateTime.Now - StartDate).ToString(@"hh\:mm\:ss") : string.Empty);
         }
 
         private void OnPawnMakeMove(object sender, EventArgs e)
