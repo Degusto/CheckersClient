@@ -7,7 +7,12 @@ namespace CheckersCommon.Utilities
         public static T NotNull<T>(this T @object, string name = null)
             where T : class
         {
-            return @object ?? throw new ArgumentNullException(name ?? nameof(@object));
+            if(@object == null)
+            {
+                throw new ArgumentNullException();
+            }
+
+            return @object;
         }
     }
 }

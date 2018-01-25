@@ -9,10 +9,5 @@ namespace CheckersCommon.Models
 
         [JsonProperty(PropertyName = "column")]
         public int Column { get; set; }
-
-        public static implicit operator Position((int Row, int Column) coordinates)
-        {
-            return new Position { Row = coordinates.Row, Column = coordinates.Column };
-        }
     }
 }

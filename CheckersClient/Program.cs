@@ -17,7 +17,7 @@ namespace CheckersCommon
             Application.SetCompatibleTextRenderingDefault(false);
 
             var view = new MainView();
-            var presenter = new MainPresenter(view, new GameService(new GameClient("127.0.0.1", 12345)));
+            var presenter = new MainPresenter(view, new GameService(new GameClient("192.168.104.11", 1234)));
 
             Application.Run(view);
         }

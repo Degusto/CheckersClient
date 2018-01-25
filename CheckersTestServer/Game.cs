@@ -36,7 +36,7 @@ namespace CheckersTestServer
         internal GameStatus Status
         {
             get => _gameStatus;
-            set
+            private set
             {
                 _gameStatus = value;
 
@@ -54,16 +54,6 @@ namespace CheckersTestServer
         internal void AddGuest(Socket client) => Guest = new Player(Guid.NewGuid().ToString(), client);
 
         internal void RemoveGuest() => Guest = new Player();
-
-        internal void Surrender(PlayerType player)
-        {
-            if (!InProgress)
-            {
-                throw new InvalidOperationException("Game isn't in progress");
-            }
-
-            Status = player == PlayerType.Host ? GameStatus.GuestWithdrew : GameStatus.HostWithdrew;
-        }
 
         internal void StartGame()
         {
@@ -103,7 +93,7 @@ namespace CheckersTestServer
             }
         }
 
-        public void MakeMove(string moveId)
+        public void MakeMove(int moveId)
         {
             if (!InProgress)
             {
@@ -113,7 +103,7 @@ namespace CheckersTestServer
             MakeMove(moveId, Status == GameStatus.HostTurn ? HostPawns : GuestPawns);
         }
 
-        private void MakeMove(string moveId, IEnumerable<Pawn> pawns)
+        private void MakeMove(int moveId, IEnumerable<Pawn> pawns)
         {
             Pawn pawn = pawns.Single(x => x.AvailableMoves.Any(m => m.Id == moveId));
             Move move = pawn.AvailableMoves.Single(x => x.Id == moveId);
@@ -187,6 +177,7 @@ namespace CheckersTestServer
             }
         }
 
+        private int _moveId = 0;
         private void AddMove(Position position, Pawn pawn, bool lookForCapture = true)
         {
             bool isValidPosition = position.Row >= 0 && position.Row <= RowCount - 1 && position.Column >= 0 && position.Column <= ColumnCount - 1;
@@ -195,7 +186,7 @@ namespace CheckersTestServer
 
             if (isValidPosition && isAvailable)
             {
-                pawn.AvailableMoves.Add(new Move { Id = Guid.NewGuid().ToString(), DestinatedPosition = position, SourcePosition = pawn.Position });
+                pawn.AvailableMoves.Add(new Move { Id = _moveId++, DestinatedPosition = position, SourcePosition = pawn.Position });
             }
             else if (!isAvailable && isOccupiedByEnemy && lookForCapture)
             {

@@ -26,8 +26,14 @@ namespace CheckersClient.Views.Controls
 
         public Pawn Pawn
         {
-            get => _pawn;
-            set => this.InvokeIfRequired(() => SetPawn(value));
+            get
+            {
+                return _pawn;
+            }
+            set
+            {
+                this.InvokeIfRequired(() => SetPawn(value));
+            }
         }
 
         private void SetPawn(Pawn pawn)
@@ -40,7 +46,10 @@ namespace CheckersClient.Views.Controls
 
         public bool IsPlaceholder
         {
-            get => _isPlaceholder;
+            get
+            {
+                return _isPlaceholder;
+            }
             set
             {
                 _isPlaceholder = value;
@@ -52,34 +61,46 @@ namespace CheckersClient.Views.Controls
 
         public bool PawnVisible
         {
-            set => this.InvokeIfRequired(() => panel.Visible = value);
+            set
+            {
+                this.InvokeIfRequired(() => panel.Visible = value);
+            }
         }
 
         private void OnPanelMouseClick(object sender, MouseEventArgs e)
         {
-            if(IsPlaceholder)
+            if (IsPlaceholder)
             {
-                MakeMove?.Invoke(this, EventArgs.Empty);
+                if (MakeMove != null)
+                {
+                    MakeMove.Invoke(this, EventArgs.Empty);
+                }
 
                 return;
             }
 
-            if(Pawn == null || !Pawn.AvailableMoves.Any())
+            if (Pawn == null || !Pawn.AvailableMoves.Any())
             {
                 return;
             }
 
-            if(CapturedMouse)
+            if (CapturedMouse)
             {
                 CapturedMouse = false;
 
-                ReleaseMouse?.Invoke(this, EventArgs.Empty);
+                if (ReleaseMouse != null)
+                {
+                    ReleaseMouse.Invoke(this, EventArgs.Empty);
+                }
             }
             else
             {
                 CapturedMouse = true;
 
-                CaptureMouse?.Invoke(this, EventArgs.Empty);
+                if (CaptureMouse != null)
+                {
+                    CaptureMouse.Invoke(this, EventArgs.Empty);
+                }
             }
         }
     }

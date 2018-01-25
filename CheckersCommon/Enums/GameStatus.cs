@@ -6,8 +6,6 @@
         HostTurn = 1,
         GuestTurn = 2,
         HostWon = 3,
-        GuestWon = 4,
-        HostWithdrew = 5,
-        GuestWithdrew = 6,
+        GuestWon = 4
     }
 }

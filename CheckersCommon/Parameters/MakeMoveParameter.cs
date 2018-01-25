@@ -9,6 +9,6 @@ namespace CheckersCommon.Parameters
         }
 
         [JsonProperty(PropertyName = "move_id")]
-        public string MoveId { get; set; }
+        public int MoveId { get; set; }
     }
 }

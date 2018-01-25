@@ -17,10 +17,15 @@ namespace CheckersCommon.Views
     {
         private const int RowCount = 8;
         private const int ColumnCount = 8;
-        private bool IsHost => hostRadioButton.Checked;
+        private bool IsHost
+        {
+            get
+            {
+                return hostRadioButton.Checked;
+            }
+        }
 
         public event EventHandler<Move> MakeMove;
-        public event EventHandler<EventArgs> Surrender;
         public event EventHandler<EventArgs> LeaveGame;
         public event EventHandler<EventArgs> EnterGame;
         public event EventHandler<EventArgs> StartGame;
@@ -58,44 +63,69 @@ namespace CheckersCommon.Views
             }
         }
 
-        public void ShowInfo(string message) => MessageBox.Show(message);
+        public void ShowInfo(string message)
+        {
+            MessageBox.Show(message);
+        }
 
-        public PlayerType PlayerType => IsHost ? PlayerType.Host : PlayerType.Guest;
+        public PlayerType PlayerType
+        {
+            get
+            {
+                return IsHost ? PlayerType.Host : PlayerType.Guest;
+            }
+        }
 
         public IEnumerable<Pawn> Pawns
         {
-            set => this.InvokeIfRequired(() => SetPawns(value));
+            set
+            {
+                this.InvokeIfRequired(() => SetPawns(value));
+            }
         }
 
         public string RoomId
         {
-            get => roomIdTextBox.Text;
-            set => this.InvokeIfRequired(() => roomIdTextBox.Text = value);
+            get
+            {
+                return roomIdTextBox.Text;
+            }
+            set
+            {
+                this.InvokeIfRequired(() => roomIdTextBox.Text = value);
+            }
         }
 
         public bool CanChangePlayerType
         {
-            set => this.InvokeIfRequired(() => hostRadioButton.Enabled = guestRadioButton.Enabled = value);
+            set
+            {
+                this.InvokeIfRequired(() => hostRadioButton.Enabled = guestRadioButton.Enabled = value);
+            }
         }
 
         public bool CanLeaveGame
         {
-            set => this.InvokeIfRequired(() => leaveGameButton.Enabled = value);
-        }
-
-        public bool CanSurrender
-        {
-            set => this.InvokeIfRequired(() => surrenderButton.Enabled = value);
+            set
+            {
+                this.InvokeIfRequired(() => leaveGameButton.Enabled = value);
+            }
         }
 
         public bool CanStartGame
         {
-            set => this.InvokeIfRequired(() => startGameButton.Enabled = value);
+            set
+            {
+                this.InvokeIfRequired(() => startGameButton.Enabled = value);
+            }
         }
 
         public bool CanEditRoomId
         {
-            set => this.InvokeIfRequired(() => roomIdTextBox.ReadOnly = !value);
+            set
+            {
+                this.InvokeIfRequired(() => roomIdTextBox.ReadOnly = !value);
+            }
         }
 
         public bool CanEnterGame
@@ -167,22 +197,35 @@ namespace CheckersCommon.Views
 
         private async void OnEnterGameButtonClick(object sender, EventArgs e)
         {
-            await Task.Run(() => EnterGame?.Invoke(this, EventArgs.Empty));
+            await Task.Run(() =>
+            {
+                if (EnterGame != null)
+                {
+                    EnterGame.Invoke(this, EventArgs.Empty);
+                }
+            });
         }
 
         private async void OnLeaveGameButtonClick(object sender, EventArgs e)
         {
-            await Task.Run(() => LeaveGame?.Invoke(this, EventArgs.Empty));
-        }
-
-        private async void OnSurrenderButtonClick(object sender, EventArgs e)
-        {
-            await Task.Run(() => Surrender?.Invoke(this, EventArgs.Empty));
+            await Task.Run(() =>
+            {
+                if (LeaveGame != null)
+                {
+                    LeaveGame.Invoke(this, EventArgs.Empty);
+                }
+            });
         }
 
         private async void OnStartGameButtonClick(object sender, EventArgs e)
         {
-            await Task.Run(() => StartGame?.Invoke(this, EventArgs.Empty));
+            await Task.Run(() =>
+            {
+                if (StartGame != null)
+                {
+                    StartGame.Invoke(this, EventArgs.Empty);
+                }
+            });
         }
 
         private void OnPawnMakeMove(object sender, EventArgs e)
@@ -193,7 +236,10 @@ namespace CheckersCommon.Views
 
             var move = pawnControl.Pawn.AvailableMoves.Single(x => x.DestinatedPosition.Row == position.Row && x.DestinatedPosition.Column == position.Column);
 
-            MakeMove?.Invoke(this, move);
+            if (MakeMove != null)
+            {
+                MakeMove.Invoke(this, move);
+            }
         }
 
         private void OnPawnReleaseMouse(object sender, EventArgs e)

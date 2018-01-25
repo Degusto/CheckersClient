@@ -38,7 +38,6 @@
             this.label5 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.surrenderButton = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.startGameButton = new System.Windows.Forms.Button();
@@ -118,7 +117,6 @@
             this.groupBox3.Controls.Add(this.label5);
             this.groupBox3.Controls.Add(this.label4);
             this.groupBox3.Controls.Add(this.label2);
-            this.groupBox3.Controls.Add(this.surrenderButton);
             this.groupBox3.Controls.Add(this.button2);
             this.groupBox3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox3.Location = new System.Drawing.Point(595, 203);
@@ -183,16 +181,6 @@
             this.label2.Size = new System.Drawing.Size(107, 13);
             this.label2.TabIndex = 5;
             this.label2.Text = "Biały - ilość pionków:";
-            // 
-            // surrenderButton
-            // 
-            this.surrenderButton.Location = new System.Drawing.Point(139, 216);
-            this.surrenderButton.Name = "surrenderButton";
-            this.surrenderButton.Size = new System.Drawing.Size(99, 23);
-            this.surrenderButton.TabIndex = 4;
-            this.surrenderButton.Text = "Poddaj grę";
-            this.surrenderButton.UseVisualStyleBackColor = true;
-            this.surrenderButton.Click += new System.EventHandler(this.OnSurrenderButtonClick);
             // 
             // button2
             // 
@@ -331,7 +319,6 @@
         private System.Windows.Forms.RadioButton guestRadioButton;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.RadioButton hostRadioButton;
-        private System.Windows.Forms.Button surrenderButton;
         private System.Windows.Forms.TableLayoutPanel gameBoardTableLayoutPanel;
         private System.Windows.Forms.Label guestPawnCountLabel;
         private System.Windows.Forms.Label hostPawnCountLabel;

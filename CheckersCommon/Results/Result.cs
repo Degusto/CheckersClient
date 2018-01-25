@@ -7,14 +7,20 @@ namespace CheckersCommon.Results
         [JsonConstructor]
         protected Result()
         {
-
+            Status = "OK";
         }
 
         [JsonIgnore]
-        public bool Success => Status == "OK";
+        public bool Success
+        {
+            get
+            {
+                return Status == "OK";
+            }
+        }
 
         [JsonProperty(PropertyName = "status")]
-        public string Status { get; private set; } = "OK";
+        public string Status { get; private set; }
 
         [JsonProperty(PropertyName = "error")]
         public string Error { get; private set; }
@@ -33,9 +39,9 @@ namespace CheckersCommon.Results
             };
         }
 
-        public static implicit operator string(Result result)
-        {
-            return JsonConvert.SerializeObject(result);
-        }
+        //public static implicit operator string(Result result)
+        //{
+        //    return JsonConvert.SerializeObject(result);
+        //}
     }
 }

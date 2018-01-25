@@ -79,8 +79,6 @@ namespace CheckersTestServer
                     return JoinRoom(json, client.Client);
                 case ActionType.LeaveRoom:
                     return LeaveRoom(json);
-                case ActionType.Surrender:
-                    return Surrender(json);
                 case ActionType.MakeMove:
                     return MakeMove(json);
                 case ActionType.UpdateGameboard:
@@ -190,24 +188,6 @@ namespace CheckersTestServer
             return Result.CreateSuccess();
         }
 
-        private Result Surrender(string json)
-        {
-            var parameter = JsonConvert.DeserializeObject<SurrenderParameter>(json);
-
-            var game = Games.FirstOrDefault(p => p.Guest.SessionId == parameter.SessionId || p.Host.SessionId == parameter.SessionId);
-
-            if (game == null)
-            {
-                return Result.CreateError("Couldn't find active room");
-            }
-
-            var playerType = game.Host.SessionId == parameter.SessionId ? PlayerType.Host : PlayerType.Guest;
-
-            game.Surrender(playerType);
-
-            return Result.CreateSuccess();
-        }
-
         private Result MakeMove(string json)
         {
             var parameter = JsonConvert.DeserializeObject<MakeMoveParameter>(json);
@@ -216,7 +196,7 @@ namespace CheckersTestServer
 
             game.MakeMove(parameter.MoveId);
 
-            UpdateGameboard(game);
+            //UpdateGameboard(game);
 
             return Result.CreateSuccess();
         }

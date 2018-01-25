@@ -23,13 +23,11 @@ namespace CheckersCommon.Presenters
             _view.MakeMove += OnMakeMove;
             _view.EnterGame += OnEnterGame;
             _view.LeaveGame += OnLeaveGame;
-            _view.Surrender += OnSurrender;
             _view.StartGame += OnStartGame;
 
             _view.CanChangePlayerType = true;
             _view.CanEnterGame = true;
             _view.CanLeaveGame = false;
-            _view.CanSurrender = false;
             _view.CanStartGame = false;
 
             _gameService.PlayerLeft += OnPlayerLeft;
@@ -43,7 +41,6 @@ namespace CheckersCommon.Presenters
             _view.RoomId = null;
             _view.CanChangePlayerType = true;
             _view.CanEnterGame = true;
-            _view.CanSurrender = false;
             _view.CanLeaveGame = false;
             _isInRoom = false;
         }
@@ -53,12 +50,8 @@ namespace CheckersCommon.Presenters
             _view.GameStatus = e.GameStatus;
             _view.Pawns = e.Pawns;
 
-            if (e.GameStatus == GameStatus.GuestWithdrew
-             || e.GameStatus == GameStatus.HostWithdrew
-             || e.GameStatus == GameStatus.GuestWon
-             || e.GameStatus == GameStatus.HostWon)
+            if (e.GameStatus == GameStatus.GuestWon || e.GameStatus == GameStatus.HostWon)
             {
-                _view.CanSurrender = false;
                 _view.CanLeaveGame = _view.PlayerType == PlayerType.Guest;
                 _view.CanStartGame = _view.PlayerType == PlayerType.Host;
 
@@ -111,7 +104,6 @@ namespace CheckersCommon.Presenters
 
             _view.CanChangePlayerType = true;
             _view.CanEnterGame = true;
-            _view.CanSurrender = false;
             _view.CanLeaveGame = false;
             _isInRoom = false;
         }
@@ -133,23 +125,12 @@ namespace CheckersCommon.Presenters
             _gameService.StartGame();
 
             _view.CanLeaveGame = false;
-            _view.CanSurrender = true;
             _view.CanStartGame = false;
         }
 
         private void OnGameStarted(object sender, EventArgs e)
         {
             _view.CanLeaveGame = false;
-            _view.CanSurrender = true;
-        }
-
-        private void OnSurrender(object sender, EventArgs e)
-        {
-            _gameService.Surrender();
-
-            _view.CanSurrender = false;
-            _view.CanLeaveGame = _view.PlayerType == PlayerType.Guest;
-            _view.CanStartGame = _view.PlayerType == PlayerType.Host;
         }
 
         private void OnMakeMove(object sender, Move move)

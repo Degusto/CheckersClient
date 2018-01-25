@@ -14,7 +14,6 @@ namespace CheckersCommon.Models
         void CloseRoom();
         void JoinRoom(string roomId);
         void LeaveRoom();
-        void Surrender();
         void MakeMove(Move move);
 
         event EventHandler<EventArgs> PlayerLeft;
@@ -50,21 +49,21 @@ namespace CheckersCommon.Models
         {
             Parameter parameter = JsonConvert.DeserializeObject<Parameter>(json);
 
-            if (parameter.ActionType == ActionType.UpdateGameboard)
+            if (parameter.ActionType == ActionType.UpdateGameboard && UpdateGameboard != null)
             {
-                UpdateGameboard?.Invoke(this, JsonConvert.DeserializeObject<UpdateGameboardParameter>(json));
+                    UpdateGameboard.Invoke(this, JsonConvert.DeserializeObject<UpdateGameboardParameter>(json));
             }
-            else if (parameter.ActionType == ActionType.JoinRoom)
+            else if (parameter.ActionType == ActionType.JoinRoom && PlayerJoined != null)
             {
-                PlayerJoined?.Invoke(this, EventArgs.Empty);
+                    PlayerJoined.Invoke(this, EventArgs.Empty);
             }
-            else if (parameter.ActionType == ActionType.LeaveRoom)
+            else if (parameter.ActionType == ActionType.LeaveRoom && PlayerLeft != null)
             {
-                PlayerLeft?.Invoke(this, EventArgs.Empty);
+                PlayerLeft.Invoke(this, EventArgs.Empty);
             }
-            else if (parameter.ActionType == ActionType.StartGame)
+            else if (parameter.ActionType == ActionType.StartGame && GameStarted != null)
             {
-                GameStarted?.Invoke(this, EventArgs.Empty);
+                GameStarted.Invoke(this, EventArgs.Empty);
             }
         }
 
@@ -99,11 +98,6 @@ namespace CheckersCommon.Models
             _sessionId = result.SessionId;
 
             return result.RoomId;
-        }
-
-        public void Surrender()
-        {
-            _gameClient.Send(new SurrenderParameter(_sessionId));
         }
     }
 }

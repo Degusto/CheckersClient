@@ -13,7 +13,6 @@ namespace CheckersCommon.Presenters.Contracts
 
         bool CanEnterGame { set; }
         bool CanLeaveGame { set; }
-        bool CanSurrender { set; }
         bool CanStartGame { set; }
         bool CanChangePlayerType { set; }
 
@@ -21,7 +20,6 @@ namespace CheckersCommon.Presenters.Contracts
         GameStatus GameStatus { set; }
 
         event EventHandler<Move> MakeMove;
-        event EventHandler<EventArgs> Surrender;
         event EventHandler<EventArgs> LeaveGame;
         event EventHandler<EventArgs> EnterGame;
         event EventHandler<EventArgs> StartGame;

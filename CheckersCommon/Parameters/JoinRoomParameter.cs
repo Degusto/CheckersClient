@@ -1,4 +1,6 @@
-﻿namespace CheckersCommon.Parameters
+﻿using Newtonsoft.Json;
+
+namespace CheckersCommon.Parameters
 {
     public sealed class JoinRoomParameter : Parameter
     {
@@ -6,6 +8,7 @@
         {
         }
 
+        [JsonProperty(PropertyName="room_id")]
         public string RoomId { get; set; }
     }
 }
